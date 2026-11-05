@@ -64,7 +64,7 @@ export function createServer(db) {
       if (sub.startsWith('/api/')) return json(res, 404, { error: 'not found' });
 
       if (req.method !== 'GET' && req.method !== 'HEAD') return json(res, 405, { error: 'method not allowed' });
-      const rel = sub === '/' ? '/index.html' : sub;
+      const rel = sub === '/' ? '/index.html' : /^\/tools\/[a-z0-9-]+\/?$/.test(sub) ? '/tool.html' : sub;
       const file = normalize(join(PUBLIC, rel));
       if (!file.startsWith(PUBLIC)) return json(res, 403, { error: 'forbidden' });
       try {

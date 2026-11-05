@@ -13,6 +13,11 @@ Open http://127.0.0.1:4000/radar/. DB lives in `data/radar.db` (override with `D
 ## Test
     npm test
 
+## UI
+- `/radar/` — tool cards, search, category/tag filters (state kept in the URL)
+- `/radar/tools/:slug` — detail page with Useful / Not useful voting (one vote per browser, changeable)
+Static HTML + vanilla JS in `public/`; all links and assets are `/radar`-prefixed.
+
 ## API
 - `GET /radar/api/tools?q=&category=&tag=` — list/filter
 - `GET /radar/api/tools/:slug` — detail (includes `myVote`)

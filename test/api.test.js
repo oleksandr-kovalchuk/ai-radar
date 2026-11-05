@@ -56,3 +56,17 @@ test('serves index under /radar/', async () => {
   assert.equal(r.status, 200);
   assert.match(await r.text(), /AI Radar/);
 });
+
+test('serves detail page, assets, all under /radar', async () => {
+  const d = await fetch(`${base}/tools/cursor`);
+  assert.equal(d.status, 200);
+  const html = await d.text();
+  assert.match(html, /id="tool"/);
+  assert.match(html, /\/radar\/app\.js/);
+  assert.equal((await fetch(`${base}/tools/cursor/`)).status, 200);
+  for (const a of ['app.js', 'styles.css']) assert.equal((await fetch(`${base}/${a}`)).status, 200);
+  const idx = await (await fetch(`${base}/`)).text();
+  assert.match(idx, /id="q"/);
+  assert.doesNotMatch(idx, /(?:href|src)="\/(?!radar)/);
+  assert.equal((await fetch(base)).status, 200);
+});
