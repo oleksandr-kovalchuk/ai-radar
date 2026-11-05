@@ -1,17 +1,30 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Radar</title><link rel="stylesheet" href="/radar/styles.css"></head>
+<title>AI Radar</title><meta name="color-scheme" content="dark light">
+<script>try{var t=localStorage.getItem('radar-theme');document.documentElement.dataset.theme=t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')}catch(e){document.documentElement.dataset.theme='dark'}</script>
+<link rel="stylesheet" href="/radar/styles.css"></head>
 <body>
-<header class="top"><div class="wrap"><a class="brand" href="/radar/">AI Radar</a><span class="tagline">A directory of AI tools, rated by you</span></div></header>
-<main class="wrap">
-  <form id="filters" class="filters" role="search" onsubmit="return false">
-    <input id="q" type="search" placeholder="Search tools by name or description" aria-label="Search tools">
-    <select id="category" aria-label="Category"><option value="">All categories</option></select>
-    <select id="tag" aria-label="Tag"><option value="">All tags</option></select>
-    <button type="button" id="reset" class="btn">Reset</button>
+<a class="skip" href="#grid">Skip to tools</a>
+<header class="top"><div class="wrap bar"><a class="brand" href="/radar/"><span class="logo" aria-hidden="true"></span>AI Radar</a><button type="button" class="icon-btn theme-toggle" id="theme" aria-label="Switch theme"></button></div></header>
+<section class="hero"><div class="wrap">
+  <h1>Discover the AI tools worth using</h1>
+  <p class="lead">A directory of AI tools, rated by you.</p>
+  <form id="filters" role="search" onsubmit="return false">
+    <label class="search" for="q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search tools by name or description" aria-label="Search tools" aria-keyshortcuts="/" autocomplete="off"><kbd aria-hidden="true">/</kbd></label>
   </form>
+</div></section>
+<main class="wrap">
+  <div class="controls">
+    <div id="cats" class="pills" role="group" aria-label="Category"></div>
+    <div class="toolbar">
+      <div id="tagdd" class="dd"></div>
+      <button type="button" id="reset" class="btn ghost">Reset</button>
+    </div>
+  </div>
+  <div id="chosen" class="row chosen" aria-label="Selected tags"></div>
   <p id="count" class="muted" aria-live="polite"></p>
-  <div id="grid" class="grid"></div>
+  <div id="grid" class="grid" aria-busy="true"></div>
 </main>
 <script src="/radar/app.js"></script>
 </body></html>

@@ -1,5 +1,7 @@
 # AI Radar
 
+Live demo: https://agents.demostage.app/radar/
+
 Directory of AI tools with voting. Single Node 24 process, SQLite storage (`node:sqlite`), no dependencies.
 Everything is served under the `/radar` base path.
 
@@ -14,7 +16,7 @@ Open http://127.0.0.1:4000/radar/. DB lives in `data/radar.db` (override with `D
     npm test
 
 ## UI
-- `/radar/` — tool cards, search, category/tag filters (state kept in the URL)
+- `/radar/` — hero search (press `/` to focus), category pills, multi-select tag dropdown, card grid (state kept in the URL; `tag=a,b` matches tools having all selected tags); dark/light theme toggle remembered in localStorage
 - `/radar/tools/:slug` — detail page with Useful / Not useful voting (one vote per browser, changeable)
 Static HTML + vanilla JS in `public/`; all links and assets are `/radar`-prefixed.
 

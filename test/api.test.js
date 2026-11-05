@@ -70,3 +70,17 @@ test('serves detail page, assets, all under /radar', async () => {
   assert.doesNotMatch(idx, /(?:href|src)="\/(?!radar)/);
   assert.equal((await fetch(base)).status, 200);
 });
+
+test('modern UI markup: custom controls, theme toggle, no native select', async () => {
+  const idx = await (await fetch(`${base}/`)).text();
+  assert.doesNotMatch(idx, /<select/);
+  for (const id of ['theme', 'cats', 'tagdd', 'q', 'grid']) assert.match(idx, new RegExp(`id="${id}"`));
+  assert.match(idx, /radar-theme/);
+  const det = await (await fetch(`${base}/tools/cursor`)).text();
+  assert.match(det, /id="theme"/);
+  assert.match(det, /Back to all tools/);
+  const css = await (await fetch(`${base}/styles.css`)).text();
+  assert.match(css, /prefers-reduced-motion/);
+  const js = await (await fetch(`${base}/app.js`)).text();
+  assert.doesNotMatch(js, /createElement\('select'\)|el\('select'/);
+});
