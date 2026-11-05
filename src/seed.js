@@ -1,0 +1,36 @@
+const T = (name, category, pricing, website, short, full, tags) => ({ name, category, pricing, website, short, full, tags });
+
+export const SEED = [
+  T('ChatGPT', 'assistants', 'freemium', 'https://chatgpt.com', 'OpenAI general-purpose AI assistant.', 'ChatGPT is OpenAI\'s conversational assistant for writing, analysis, coding help, image generation and voice chat, with free and paid tiers.', ['chat', 'openai', 'multimodal']),
+  T('Claude', 'assistants', 'freemium', 'https://claude.ai', 'Anthropic\'s helpful, careful AI assistant.', 'Claude is Anthropic\'s assistant, known for long context, strong writing and coding, and document analysis.', ['chat', 'anthropic', 'long-context']),
+  T('Gemini', 'assistants', 'freemium', 'https://gemini.google.com', 'Google\'s multimodal AI assistant.', 'Gemini integrates with Google Workspace and Search and handles text, images, audio and video input.', ['chat', 'google', 'multimodal']),
+  T('Microsoft Copilot', 'assistants', 'freemium', 'https://copilot.microsoft.com', 'Microsoft\'s AI companion across Windows and Office.', 'Copilot brings chat, web answers and image generation to Windows, Edge and Microsoft 365.', ['chat', 'microsoft', 'productivity']),
+  T('Le Chat', 'assistants', 'freemium', 'https://chat.mistral.ai', 'Mistral AI\'s fast chat assistant.', 'Le Chat is the assistant from French lab Mistral AI, offering web search, code interpreter and image generation.', ['chat', 'mistral', 'open-weights']),
+  T('GitHub Copilot', 'coding', 'freemium', 'https://github.com/features/copilot', 'AI pair programmer inside your editor.', 'GitHub Copilot provides code completion, chat and agent mode in VS Code, JetBrains and other IDEs.', ['ide', 'autocomplete', 'github']),
+  T('Cursor', 'coding', 'freemium', 'https://cursor.com', 'AI-first code editor.', 'Cursor is a VS Code-based editor with codebase-aware chat, multi-file edits and background agents.', ['ide', 'editor', 'agents']),
+  T('Claude Code', 'coding', 'paid', 'https://claude.com/claude-code', 'Agentic coding tool for your terminal.', 'Claude Code reads your codebase, edits files, runs commands and tests from the terminal.', ['cli', 'agents', 'anthropic']),
+  T('Windsurf', 'coding', 'freemium', 'https://windsurf.com', 'Agentic IDE with Cascade.', 'Windsurf is an AI IDE whose Cascade agent understands your project and performs multi-step edits.', ['ide', 'editor', 'agents']),
+  T('Replit Agent', 'coding', 'freemium', 'https://replit.com', 'Build and deploy apps from a prompt.', 'Replit Agent creates, runs and deploys full applications in the browser from natural-language descriptions.', ['app-builder', 'cloud', 'deploy']),
+  T('v0', 'coding', 'freemium', 'https://v0.dev', 'Generate UI and web apps from prompts.', 'v0 by Vercel generates React and Tailwind interfaces from text, ready to deploy.', ['ui', 'frontend', 'vercel']),
+  T('Midjourney', 'images', 'paid', 'https://www.midjourney.com', 'High-quality artistic image generation.', 'Midjourney generates stylized, high-fidelity images from prompts via its web app.', ['image-generation', 'art']),
+  T('DALL-E 3', 'images', 'freemium', 'https://openai.com/dall-e-3', 'OpenAI\'s text-to-image model.', 'DALL-E 3 follows detailed prompts closely and is available inside ChatGPT and the OpenAI API.', ['image-generation', 'openai']),
+  T('Stable Diffusion', 'images', 'free', 'https://stability.ai', 'Open-weights image generation models.', 'Stable Diffusion models can be run locally and fine-tuned, with a large ecosystem of tools and checkpoints.', ['image-generation', 'open-source', 'local']),
+  T('Adobe Firefly', 'images', 'freemium', 'https://firefly.adobe.com', 'Commercially safe generative image tools.', 'Firefly generates and edits images and is integrated in Photoshop and Illustrator, trained on licensed content.', ['image-generation', 'adobe', 'editing']),
+  T('Ideogram', 'images', 'freemium', 'https://ideogram.ai', 'Image generation with accurate text rendering.', 'Ideogram is known for legible typography inside generated images, useful for posters and logos.', ['image-generation', 'typography']),
+  T('Runway', 'video', 'freemium', 'https://runwayml.com', 'Generative video and creative tools.', 'Runway offers Gen-series text and image to video models plus editing tools for filmmakers.', ['video-generation', 'editing']),
+  T('Sora', 'video', 'paid', 'https://sora.com', 'OpenAI\'s text-to-video model.', 'Sora generates short, realistic video clips from text prompts and images.', ['video-generation', 'openai']),
+  T('Pika', 'video', 'freemium', 'https://pika.art', 'Easy AI video generation and effects.', 'Pika turns text and images into short videos and adds playful effects.', ['video-generation', 'effects']),
+  T('HeyGen', 'video', 'freemium', 'https://www.heygen.com', 'AI avatar videos and translation.', 'HeyGen creates talking-avatar videos and dubs them into many languages with lip sync.', ['avatars', 'dubbing', 'marketing']),
+  T('ElevenLabs', 'audio', 'freemium', 'https://elevenlabs.io', 'Realistic text-to-speech and voice cloning.', 'ElevenLabs offers natural multilingual voices, dubbing and a conversational agents platform.', ['tts', 'voice', 'dubbing']),
+  T('Suno', 'audio', 'freemium', 'https://suno.com', 'Generate full songs from text.', 'Suno creates songs with vocals and instruments from a prompt or lyrics.', ['music', 'generation']),
+  T('Whisper', 'audio', 'free', 'https://github.com/openai/whisper', 'Open-source speech recognition.', 'Whisper is OpenAI\'s open-source multilingual speech-to-text model you can run locally.', ['stt', 'open-source', 'local']),
+  T('Otter.ai', 'audio', 'freemium', 'https://otter.ai', 'Meeting transcription and notes.', 'Otter records and transcribes meetings, generating summaries and action items.', ['transcription', 'meetings']),
+  T('Perplexity', 'search', 'freemium', 'https://www.perplexity.ai', 'Answer engine with cited sources.', 'Perplexity searches the web and answers questions with inline citations, plus deep research mode.', ['search', 'citations', 'research']),
+  T('You.com', 'search', 'freemium', 'https://you.com', 'AI search and assistant.', 'You.com blends web search with AI chat and customizable agents.', ['search', 'chat']),
+  T('NotebookLM', 'search', 'free', 'https://notebooklm.google.com', 'Research assistant grounded in your sources.', 'NotebookLM answers questions about your uploaded documents and generates audio overviews.', ['research', 'documents', 'google']),
+  T('AutoGPT', 'agents', 'free', 'https://github.com/Significant-Gravitas/AutoGPT', 'Open-source autonomous agent platform.', 'AutoGPT lets you build and run autonomous agents that break goals into tasks.', ['agents', 'open-source', 'automation']),
+  T('LangChain', 'agents', 'free', 'https://www.langchain.com', 'Framework for LLM apps and agents.', 'LangChain and LangGraph provide building blocks for chains, tools, memory and multi-agent workflows.', ['framework', 'open-source', 'developer']),
+  T('n8n', 'agents', 'freemium', 'https://n8n.io', 'Workflow automation with AI agent nodes.', 'n8n is a self-hostable workflow automation tool with AI agent and LLM nodes.', ['automation', 'self-hosted', 'workflows']),
+];
+
+export const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
