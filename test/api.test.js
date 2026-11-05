@@ -1,6 +1,7 @@
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { openDb } from '../src/db.js';
+import { SEED, slugify } from '../src/seed.js';
 import { createServer } from '../src/server.js';
 
 let server, base;
@@ -83,4 +84,28 @@ test('modern UI markup: custom controls, theme toggle, no native select', async 
   assert.match(css, /prefers-reduced-motion/);
   const js = await (await fetch(`${base}/app.js`)).text();
   assert.doesNotMatch(js, /createElement\('select'\)|el\('select'/);
+});
+
+test('sorts by name, useful, newest and combines with filters', async () => {
+  const get = async (qs) => (await (await fetch(`${base}/api/tools?${qs}`)).json()).tools;
+  const names = (await get('sort=name')).map((t) => t.name);
+  assert.deepEqual(names, [...names].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' })));
+  assert.deepEqual((await get('')).map((t) => t.slug), (await get('sort=bogus')).map((t) => t.slug));
+
+  for (let i = 0; i < 3; i++) await post(`${base}/api/tools/midjourney/vote`, 'useful');
+  await post(`${base}/api/tools/runway/vote`, 'useful');
+  const useful = await get('sort=useful');
+  assert.equal(useful[0].slug, 'midjourney');
+  for (let i = 1; i < useful.length; i++) {
+    const a = useful[i - 1], b = useful[i];
+    assert.ok(a.useful > b.useful || (a.useful === b.useful && a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }) <= 0));
+  }
+  const newest = await get('sort=newest');
+  assert.deepEqual(newest.map((t) => t.slug), SEED.map((t) => slugify(t.name)).reverse());
+
+  const combo = await get('category=images&sort=useful');
+  assert.ok(combo.length > 1 && combo.every((t) => t.category === 'images'));
+  assert.equal(combo[0].slug, 'midjourney');
+  const tagged = await get('tag=open-source&sort=newest');
+  assert.ok(tagged.length > 0 && tagged.every((t) => t.tags.includes('open-source')));
 });

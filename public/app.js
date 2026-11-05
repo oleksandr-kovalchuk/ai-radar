@@ -76,7 +76,7 @@ function initList() {
       : [el('li', { class: 'dd-empty', role: 'presentation' }, 'No matching tags')]));
     if (visible[active]) ddSearch.setAttribute('aria-activedescendant', 'opt-' + visible[active]); else ddSearch.removeAttribute('aria-activedescendant');
   }
-  function open() { if (isOpen()) return; dd.classList.add('open'); ddBtn.setAttribute('aria-expanded', 'true'); ddSearch.value = ''; active = 0; renderOpts(); ddSearch.focus(); }
+  function open() { if (isOpen()) return; sClose(false); dd.classList.add('open'); ddBtn.setAttribute('aria-expanded', 'true'); ddSearch.value = ''; active = 0; renderOpts(); ddSearch.focus(); }
   function close(refocus) { if (!isOpen()) return; dd.classList.remove('open'); ddBtn.setAttribute('aria-expanded', 'false'); if (refocus) ddBtn.focus(); }
   function toggle(t) { selected.has(t) ? selected.delete(t) : selected.add(t); paintTags(); load(); }
   function paintTags() {
@@ -98,6 +98,36 @@ function initList() {
   document.addEventListener('click', (e) => { if (!dd.contains(e.target)) close(false); });
   dd.addEventListener('focusout', (e) => { if (e.relatedTarget && !dd.contains(e.relatedTarget)) close(false); });
 
+  // sort dropdown
+  const SORTS = [['name', 'Name (A–Z)'], ['useful', 'Most useful'], ['newest', 'Newest']];
+  let sort = SORTS.some(([k]) => k === params.get('sort')) ? params.get('sort') : 'name';
+  const sdd = document.getElementById('sortdd');
+  sdd.classList.add('dd-sort');
+  const sBtn = el('button', { type: 'button', class: 'btn dd-btn', 'aria-haspopup': 'listbox', 'aria-expanded': 'false', 'aria-controls': 'sort-list', 'aria-label': 'Sort tools' });
+  const sList = el('ul', { id: 'sort-list', class: 'dd-list', role: 'listbox', 'aria-label': 'Sort by', tabindex: '-1' });
+  sdd.append(sBtn, el('div', { class: 'dd-panel' }, sList));
+  let sActive = 0;
+  const sOpen = () => sdd.classList.contains('open');
+  function sPaint() {
+    sBtn.replaceChildren(el('span', {}, 'Sort: ' + SORTS.find(([k]) => k === sort)[1]), el('span', { class: 'caret', 'aria-hidden': 'true' }, '▼'));
+    sList.replaceChildren(...SORTS.map(([k, label], i) => el('li', { id: 'sort-' + k, role: 'option', class: 'dd-opt' + (i === sActive ? ' active' : ''), 'aria-selected': String(k === sort), onmousedown: (e) => e.preventDefault(), onclick: () => sPick(k) }, el('span', { class: 'tick', 'aria-hidden': 'true' }, '✓'), label)));
+    sList.setAttribute('aria-activedescendant', 'sort-' + SORTS[sActive][0]);
+  }
+  function sOpenUp() { if (sOpen()) return; close(false); sActive = SORTS.findIndex(([k]) => k === sort); sdd.classList.add('open'); sBtn.setAttribute('aria-expanded', 'true'); sPaint(); sList.focus(); }
+  function sClose(refocus) { if (!sOpen()) return; sdd.classList.remove('open'); sBtn.setAttribute('aria-expanded', 'false'); if (refocus) sBtn.focus(); }
+  function sPick(k) { sort = k; sClose(true); sPaint(); load(); }
+  sBtn.addEventListener('click', () => (sOpen() ? sClose(true) : sOpenUp()));
+  sBtn.addEventListener('keydown', (e) => { if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); sOpenUp(); } });
+  sList.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); sActive = (sActive + (e.key === 'ArrowDown' ? 1 : SORTS.length - 1)) % SORTS.length; sPaint(); }
+    else if (e.key === 'Home' || e.key === 'End') { e.preventDefault(); sActive = e.key === 'Home' ? 0 : SORTS.length - 1; sPaint(); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); sPick(SORTS[sActive][0]); }
+    else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); sClose(true); }
+    else if (e.key === 'Tab') sClose(false);
+  });
+  document.addEventListener('click', (e) => { if (!sdd.contains(e.target)) sClose(false); });
+  sdd.addEventListener('focusout', (e) => { if (e.relatedTarget && !sdd.contains(e.relatedTarget)) sClose(false); });
+
   // loading
   function skeletons() {
     grid.setAttribute('aria-busy', 'true');
@@ -109,6 +139,7 @@ function initList() {
     const qs = new URLSearchParams();
     if (q.value.trim()) qs.set('q', q.value.trim());
     if (category) qs.set('category', category);
+    if (sort !== 'name') qs.set('sort', sort);
     const apiQs = qs.toString();
     if (selected.size) qs.set('tag', [...selected].sort().join(','));
     const s = qs.toString();
@@ -132,14 +163,14 @@ function initList() {
         el('span', { class: 'votes-mini', 'aria-label': `${t.useful} useful, ${t.notUseful} not useful` }, el('span', {}, `👍 ${t.useful}`), el('span', {}, `👎 ${t.notUseful}`))));
   }
   q.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(load, 200); });
-  document.getElementById('reset').addEventListener('click', () => { q.value = ''; category = ''; selected.clear(); paintPills(); paintTags(); load(); });
+  document.getElementById('reset').addEventListener('click', () => { q.value = ''; category = ''; sort = 'name'; selected.clear(); sPaint(); paintPills(); paintTags(); load(); });
   document.addEventListener('keydown', (e) => {
     if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) && !document.activeElement.isContentEditable) {
       e.preventDefault(); q.focus(); q.select();
     }
   });
 
-  paintPills(); paintTags(); skeletons();
+  sPaint(); paintPills(); paintTags(); skeletons();
   api('/tools').then((all) => { allTags = [...new Set(all.tools.flatMap((x) => x.tags))].sort(); if (isOpen()) renderOpts(); }).catch(() => {});
   load();
 }

@@ -32,7 +32,7 @@ const SELECT = `SELECT t.slug, t.name, t.category, t.short_description AS shortD
 
 const shape = (r) => r && { ...r, tags: JSON.parse(r.tags) };
 
-export function listTools(db, { q, category, tag } = {}) {
+export function listTools(db, { q, category, tag, sort } = {}) {
   const where = [], args = [];
   if (q) {
     const like = `%${q.toLowerCase().replace(/[\\%_]/g, '\\$&')}%`;
@@ -41,7 +41,8 @@ export function listTools(db, { q, category, tag } = {}) {
   }
   if (category) { where.push('LOWER(t.category)=?'); args.push(category.toLowerCase()); }
   if (tag) { where.push(`EXISTS (SELECT 1 FROM json_each(t.tags) WHERE LOWER(value)=?)`); args.push(tag.toLowerCase()); }
-  const sql = `${SELECT}${where.length ? ' WHERE ' + where.join(' AND ') : ''} ORDER BY t.name`;
+  const order = { useful: 'useful DESC, t.name COLLATE NOCASE', newest: 't.id DESC', name: 't.name COLLATE NOCASE' }[sort] || 't.name COLLATE NOCASE';
+  const sql = `${SELECT}${where.length ? ' WHERE ' + where.join(' AND ') : ''} ORDER BY ${order}`;
   return db.prepare(sql).all(...args).map(shape);
 }
 

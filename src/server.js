@@ -42,7 +42,7 @@ export function createServer(db) {
       }
 
       if (sub === '/api/tools' && req.method === 'GET') {
-        const tools = listTools(db, { q: url.searchParams.get('q'), category: url.searchParams.get('category'), tag: url.searchParams.get('tag') });
+        const tools = listTools(db, { q: url.searchParams.get('q'), category: url.searchParams.get('category'), tag: url.searchParams.get('tag'), sort: url.searchParams.get('sort') });
         return json(res, 200, { count: tools.length, tools }, setCookie);
       }
       const m = sub.match(/^\/api\/tools\/([a-z0-9-]+)(\/vote)?$/);

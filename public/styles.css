@@ -50,6 +50,7 @@ kbd{font:600 .8rem ui-monospace,monospace;color:var(--muted);border:1px solid va
 .dd-opt.active,.dd-opt:hover{background:var(--chip)}
 .dd-opt.active{outline:2px solid var(--ring);outline-offset:-2px}
 .box{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--muted);display:grid;place-items:center;flex:none;transition:background .15s}
+.dd-sort .dd-panel{width:min(220px,calc(100vw - 32px))}.dd-sort .dd-btn{min-width:170px}.dd-opt .tick{width:16px;visibility:hidden;color:var(--accent)}.dd-opt[aria-selected=true] .tick{visibility:visible}
 .dd-empty{padding:10px;color:var(--muted)}
 .chosen{min-height:0;margin:6px 0 0}
 .chip{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:.85rem;padding:4px 6px 4px 12px;border-radius:999px;border:1px solid var(--accent);background:var(--midbg);color:var(--ink);cursor:pointer;animation:pop .25s both}
@@ -93,5 +94,5 @@ kbd{font:600 .8rem ui-monospace,monospace;color:var(--muted);border:1px solid va
 .num{display:inline-block;min-width:1.2ch;font-variant-numeric:tabular-nums}
 .num.bump{animation:bump .4s}
 @keyframes bump{0%{transform:translateY(60%);opacity:0}100%{transform:none;opacity:1}}
-@media(max-width:520px){.detail{padding:20px;border-radius:18px}.hero{padding-top:28px}.dd-btn{min-width:0}.toolbar{width:100%}.dd{flex:1}.dd-btn{width:100%}kbd{display:none}.search{height:52px}}
+@media(max-width:520px){.detail{padding:20px;border-radius:18px}.hero{padding-top:28px}.dd-btn{min-width:0}.toolbar{width:100%}.dd{flex:1}.dd-btn{width:100%}.dd-sort .dd-btn{min-width:0}kbd{display:none}.search{height:52px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.sk{background:var(--sk)}}
