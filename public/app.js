@@ -144,6 +144,7 @@ function initList() {
     if (selected.size) qs.set('tag', [...selected].sort().join(','));
     const s = qs.toString();
     history.replaceState(null, '', BASE + '/' + (s ? '?' + s : ''));
+    try { sessionStorage.setItem('radar-catalog-qs', s); } catch {}
     let data;
     try { data = await api('/tools' + (apiQs ? '?' + apiQs : '')); }
     catch (e) { if (my === seq) { grid.setAttribute('aria-busy', 'false'); grid.replaceChildren(); count.textContent = 'Could not load tools: ' + e.message; } return; }
@@ -178,6 +179,11 @@ function initList() {
 
 async function initDetail() {
   const root = document.getElementById('tool');
+  try {
+    const saved = sessionStorage.getItem('radar-catalog-qs');
+    const back = document.querySelector('a.back');
+    if (saved && back) back.href = BASE + '/?' + saved;
+  } catch {}
   const slug = decodeURIComponent(location.pathname.split('/').filter(Boolean).pop());
   let t;
   try { t = await api('/tools/' + encodeURIComponent(slug)); }
