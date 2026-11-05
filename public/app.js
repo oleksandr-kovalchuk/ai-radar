@@ -151,8 +151,9 @@ function initList() {
     const tools = data.tools.filter((t) => [...selected].every((x) => t.tags.includes(x)));
     count.textContent = tools.length + (tools.length === 1 ? ' tool' : ' tools');
     grid.setAttribute('aria-busy', 'false');
-    grid.replaceChildren(...(tools.length ? tools.map(card) : [el('p', { class: 'empty' }, 'No tools match your filters.')]));
+    grid.replaceChildren(...(tools.length ? tools.map(card) : [el('div', { class: 'empty' }, el('p', {}, 'No tools match your filters.'), el('button', { type: 'button', class: 'btn', onclick: clearFilters }, 'Clear filters'))]));
   }
+  function clearFilters() { q.value = ''; category = ''; selected.clear(); paintPills(); paintTags(); load(); q.focus(); }
   function card(t, i) {
     return el('article', { class: 'card', style: `--i:${Math.min(i, 12)}` },
       el('h2', {}, el('a', { href: `${BASE}/tools/${t.slug}` }, t.name)),

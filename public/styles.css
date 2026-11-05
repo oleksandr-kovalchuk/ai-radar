@@ -72,7 +72,7 @@ kbd{font:600 .8rem ui-monospace,monospace;color:var(--muted);border:1px solid va
 .card .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-size:.9rem;padding-top:8px;border-top:1px solid var(--line)}
 .card .foot a{position:relative;z-index:1;text-decoration:none;font-weight:600}.card .foot a:hover{text-decoration:underline}
 .votes-mini{display:flex;gap:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-.empty{grid-column:1/-1;text-align:center;padding:48px 0;color:var(--muted)}
+.empty{grid-column:1/-1;text-align:center;padding:48px 0;color:var(--muted)}.empty p{margin:0 0 14px}
 .sk{background:linear-gradient(90deg,var(--sk),var(--sk2),var(--sk));background-size:200% 100%;animation:shimmer 1.3s linear infinite;border-radius:10px;height:14px}
 .sk-title{height:26px;width:55%;margin-bottom:6px}.sk-line{width:100%}.sk-short{width:60%}.sk-badge{width:30%;height:20px}
 .card.skel{animation:none;box-shadow:none}.card.skel:hover{transform:none;border-color:var(--line);box-shadow:none}
