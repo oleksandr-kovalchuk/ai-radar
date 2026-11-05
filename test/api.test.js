@@ -127,3 +127,10 @@ test('similar tools: excludes self, max 4, ranked by shared tags then category t
     if (j.tools.length) assert.equal(key(j.tools[0])[0], best);
   }
 });
+
+test('dropdown outside-click uses composedPath so re-rendered targets do not close it', async () => {
+  const js = await (await fetch(`${base}/app.js`)).text();
+  assert.match(js, /composedPath\(\)\.includes\(dd\)/);
+  assert.match(js, /composedPath\(\)\.includes\(sdd\)/);
+  assert.doesNotMatch(js, /!s?dd\.contains\(e\.target\)\) s?[cC]lose/);
+});

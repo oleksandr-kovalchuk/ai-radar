@@ -95,7 +95,7 @@ function initList() {
     else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(true); }
     else if (e.key === 'Tab') close(false);
   });
-  document.addEventListener('click', (e) => { if (!dd.contains(e.target)) close(false); });
+  document.addEventListener('click', (e) => { if (!e.composedPath().includes(dd)) close(false); });
   dd.addEventListener('focusout', (e) => { if (e.relatedTarget && !dd.contains(e.relatedTarget)) close(false); });
 
   // sort dropdown
@@ -125,7 +125,7 @@ function initList() {
     else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); sClose(true); }
     else if (e.key === 'Tab') sClose(false);
   });
-  document.addEventListener('click', (e) => { if (!sdd.contains(e.target)) sClose(false); });
+  document.addEventListener('click', (e) => { if (!e.composedPath().includes(sdd)) sClose(false); });
   sdd.addEventListener('focusout', (e) => { if (e.relatedTarget && !sdd.contains(e.relatedTarget)) sClose(false); });
 
   // loading
