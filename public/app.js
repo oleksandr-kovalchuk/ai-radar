@@ -173,7 +173,7 @@ function initList() {
   });
 
   sPaint(); paintPills(); paintTags(); skeletons();
-  api('/tools').then((all) => { allTags = [...new Set(all.tools.flatMap((x) => x.tags))].sort(); if (isOpen()) renderOpts(); }).catch(() => {});
+  api('/tools').then((all) => { for (const p of pills) { const n = p.dataset.cat ? all.tools.filter((x) => x.category === p.dataset.cat).length : all.tools.length; p.append(' ', el('span', { class: 'pill-count' }, String(n))); } allTags = [...new Set(all.tools.flatMap((x) => x.tags))].sort(); if (isOpen()) renderOpts(); }).catch(() => {});
   load();
 }
 
