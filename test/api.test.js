@@ -109,3 +109,21 @@ test('sorts by name, useful, newest and combines with filters', async () => {
   const tagged = await get('tag=open-source&sort=newest');
   assert.ok(tagged.length > 0 && tagged.every((t) => t.tags.includes('open-source')));
 });
+
+test('similar tools: excludes self, max 4, ranked by shared tags then category then name', async () => {
+  const get = async (slug) => (await fetch(`${base}/api/tools/${slug}/similar`)).json();
+  assert.equal((await fetch(`${base}/api/tools/nope/similar`)).status, 404);
+  const all = (await (await fetch(`${base}/api/tools`)).json()).tools;
+  for (const me of all) {
+    const j = await get(me.slug);
+    assert.ok(j.count === j.tools.length && j.count <= 4);
+    assert.ok(j.tools.every((t) => t.slug !== me.slug));
+    const key = (t) => [t.tags.filter((x) => me.tags.includes(x)).length, t.category === me.category ? 1 : 0];
+    for (let i = 1; i < j.tools.length; i++) {
+      const [a, b] = [key(j.tools[i - 1]), key(j.tools[i])];
+      assert.ok(a[0] > b[0] || (a[0] === b[0] && (a[1] > b[1] || (a[1] === b[1] && j.tools[i - 1].name.localeCompare(j.tools[i].name, 'en', { sensitivity: 'base' }) <= 0))));
+    }
+    const best = all.filter((t) => t.slug !== me.slug).map((t) => key(t)[0]).sort((a, b) => b - a)[0];
+    if (j.tools.length) assert.equal(key(j.tools[0])[0], best);
+  }
+});

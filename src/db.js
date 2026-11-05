@@ -50,6 +50,19 @@ export function getTool(db, slug) {
   return shape(db.prepare(`${SELECT} WHERE t.slug=?`).get(slug));
 }
 
+export function similarTools(db, slug, limit = 4) {
+  const me = getTool(db, slug);
+  if (!me) return null;
+  const mine = new Set(me.tags);
+  return listTools(db)
+    .filter((t) => t.slug !== slug)
+    .map((t) => ({ t, shared: t.tags.filter((x) => mine.has(x)).length, same: t.category === me.category }))
+    .filter((r) => r.shared > 0 || r.same)
+    .sort((a, b) => b.shared - a.shared || b.same - a.same || a.t.name.localeCompare(b.t.name, 'en', { sensitivity: 'base' }))
+    .slice(0, limit)
+    .map((r) => r.t);
+}
+
 export function vote(db, slug, voter, value) {
   const row = db.prepare('SELECT id FROM tools WHERE slug=?').get(slug);
   if (!row) return null;

@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, normalize, extname } from 'node:path';
-import { openDb, listTools, getTool, vote, myVote } from './db.js';
+import { openDb, listTools, getTool, similarTools, vote, myVote } from './db.js';
 
 const BASE = '/radar';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -44,6 +44,12 @@ export function createServer(db) {
       if (sub === '/api/tools' && req.method === 'GET') {
         const tools = listTools(db, { q: url.searchParams.get('q'), category: url.searchParams.get('category'), tag: url.searchParams.get('tag'), sort: url.searchParams.get('sort') });
         return json(res, 200, { count: tools.length, tools }, setCookie);
+      }
+      const sm = sub.match(/^\/api\/tools\/([a-z0-9-]+)\/similar$/);
+      if (sm) {
+        if (req.method !== 'GET') return json(res, 405, { error: 'method not allowed' });
+        const tools = similarTools(db, sm[1]);
+        return tools ? json(res, 200, { count: tools.length, tools }, setCookie) : json(res, 404, { error: 'tool not found' }, setCookie);
       }
       const m = sub.match(/^\/api\/tools\/([a-z0-9-]+)(\/vote)?$/);
       if (m) {

@@ -217,6 +217,14 @@ async function initDetail() {
     el('p', {}, el('a', { class: 'btn primary', href: t.website, target: '_blank', rel: 'noopener noreferrer' }, 'Visit website ↗')),
     el('div', { class: 'votes' }, btns.useful, btns.not_useful), msg);
   render(false);
+  api(`/tools/${encodeURIComponent(slug)}/similar`).then(({ tools }) => {
+    if (!tools.length) return;
+    root.append(el('section', { class: 'similar', 'aria-labelledby': 'similar-h' }, el('h2', { id: 'similar-h' }, 'Similar tools'),
+      el('div', { class: 'sim-grid' }, ...tools.map((s, i) => el('article', { class: 'card sim', style: `--i:${i}` },
+        el('h3', {}, el('a', { href: `${BASE}/tools/${s.slug}` }, s.name)),
+        el('div', { class: 'row' }, el('span', { class: 'badge' }, s.category), pricingBadge(s.pricing)),
+        el('p', {}, s.shortDescription))))));
+  }).catch(() => {});
 }
 
 initTheme();
